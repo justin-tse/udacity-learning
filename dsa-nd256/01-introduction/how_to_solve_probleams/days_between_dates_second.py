@@ -12,3 +12,8 @@
 # (1)second date must not be before first date(Defensive Programming -> check this in our code)
 # (2) Gregorian calendar (15 Oct 1582)
 # How are inputs represented? => def daysBetweenDates(year1, month1, day1, year2, month2, day2)
+
+# The second rule: What are the outputs?
+# Outputs: Calculate your age in days
+# How should we specify the output? => Return a number giving the numbers of days
+# between the first date and the second date.
