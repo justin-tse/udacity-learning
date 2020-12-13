@@ -50,26 +50,8 @@
 #     days += 1
 # return days                  ]
 
-def nextDay(year, month, day):
-    """Waring: this version incorrectly
-       assumes all months have 30 days!"""
-    if day < 30:
-        return year, month, day + 1
-    else:
-        if month < 12:
-            return year, month + 1, 1
-        else:
-            return year + 1, 1, 1
-
-def dateIsBefore(year1, month1, day1, year2, month2, day2):
-    if year1 < year2:
-      return True
-    if year1 == year2:
-        if month1 < month2:
-            return True
-        if month1 == month2:
-            return day1 < day2
-    return False
+# Real world problem => Think best strategy
+# The fifth rule: Develop incrementally and test as we go.
 
 def daysBetweenDates(year1, month1, day1, year2, month2, day2):
     """Returns the number of days between year1/month1/day1 and 
@@ -82,6 +64,36 @@ def daysBetweenDates(year1, month1, day1, year2, month2, day2):
         days += 1
     return days
 
+def dateIsBefore(year1, month1, day1, year2, month2, day2):
+    if year1 < year2:
+      return True
+    if year1 == year2:
+        if month1 < month2:
+            return True
+        if month1 == month2:
+            return day1 < day2
+    return False
+
+def nextDay(year, month, day):
+    """Waring: this version incorrectly
+       assumes all months have 30 days!"""
+    if day < daysInMonth(year, month):
+        return year, month, day + 1
+    else:
+        if month < 12:
+            return year, month + 1, 1
+        else:
+            return year + 1, 1, 1
+
+def daysInMonth(year, month):
+    daysOfMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if isLeapYear(year):
+        daysOfMonths[1] = 29
+    return daysOfMonths[month - 1]
+
+def isLeapYear(year):
+    return year % 4 == 0 and year % 100 != 0 or year % 400 == 0
+
 def test():
     assert nextDay(2011, 11, 10)
     assert nextDay(2011, 11, 30)
@@ -89,8 +101,22 @@ def test():
     assert dateIsBefore(2011, 10, 2, 2011, 10, 3)
     assert dateIsBefore(2011, 9, 2, 2011, 10, 2)
     assert dateIsBefore(2010, 9, 2, 2011, 8, 2)
-    assert daysBetweenDates(2011, 10, 2, 2011, 10, 3)
-    assert daysBetweenDates(2011, 9, 2, 2011, 10, 2)
-    assert daysBetweenDates(2010, 9, 2, 2011, 8, 2)
+    assert nextDay(2011, 12, 30) == (2011, 12, 31)
+    assert nextDay(2011, 2, 28) == (2011, 3, 1)
+    assert daysInMonth(2011, 2) == 28
+    assert daysInMonth(2012, 2) == 29
+    assert daysInMonth(2000, 2) == 29
+    assert daysInMonth(2000, 1) == 31
+    assert daysInMonth(2000, 4) == 30
+    assert daysBetweenDates(2011, 10, 2, 2011, 10, 3) == 1
+    assert daysBetweenDates(2011, 9, 2, 2011, 10, 2) == 30
+    assert daysBetweenDates(2010, 9, 2, 2011, 8, 2) == 334
+    assert isLeapYear(2004)
+    assert isLeapYear(2000)
+    assert isLeapYear(2005) == False
+    assert isLeapYear(1900) == False
+    assert daysBetweenDates(2012, 2, 2, 2012, 3, 2) == 29
+    assert daysBetweenDates(2012, 2, 2, 2013, 2, 2) == 366
     print("All pass!")
+    
 test()
